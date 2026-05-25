@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CodeAlpha Language Translation Tool</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <h1>Language Translation Tool</h1>
+        <p class="subtitle">CodeAlpha AI Internship - Task 1</p>
+
+        <form method="POST">
+            <label>Enter Text</label>
+            <textarea name="input_text" placeholder="Type text here..." required>{{ input_text }}</textarea>
+
+            <div class="row">
+                <div>
+                    <label>Source Language</label>
+                    <select name="source_lang">
+                        {% for code, name in languages.items() %}
+                        <option value="{{ code }}" {% if code == source_lang %}selected{% endif %}>{{ name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div>
+                    <label>Target Language</label>
+                    <select name="target_lang">
+                        {% for code, name in languages.items() %}
+                        {% if code != "auto" %}
+                        <option value="{{ code }}" {% if code == target_lang %}selected{% endif %}>{{ name }}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit">Translate</button>
+        </form>
+
+        {% if error %}
+        <div class="error">{{ error }}</div>
+        {% endif %}
+
+        {% if translated_text %}
+        <div class="result">
+            <h2>Translated Text</h2>
+            <p id="translatedText">{{ translated_text }}</p>
+            <button class="copy-btn" onclick="copyText()">Copy Text</button>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function copyText() {
+    const text = document.getElementById("translatedText").innerText;
+    navigator.clipboard.writeText(text);
+    alert("Translated text copied!");
+}
+</script>
+</body>
+</html>
